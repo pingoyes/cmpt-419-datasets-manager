@@ -40,3 +40,8 @@ a:hover {
   min-width: 480px;
   margin-bottom: 16px;
 }
+
+.content-wrapper {
+  padding-left: 64px !important;
+  padding-right: 64px !important;
+}

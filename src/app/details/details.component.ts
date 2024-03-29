@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, ElementRef, ViewChild, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Dataset, DatasetsService } from '../datasets/datasets.service';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatTable, MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule, MatSort } from '@angular/material/sort';
 import { SelectionModel } from '@angular/cdk/collections';
@@ -30,14 +30,13 @@ export class DetailsComponent {
 
   displayedColumns: string[] = [];
   dataColumns: string[] = [];
-  dataSource: MatTableDataSource<any[]> = new MatTableDataSource<any[]>;
+  dataSource: MatTableDataSource<any> = new MatTableDataSource<any>;
 
-  selection = new SelectionModel<any[]>(true, []);
+  selection = new SelectionModel<any>(true, []);
 
   // from the ng2-charts demo
   @ViewChild(BaseChartDirective) chart: BaseChartDirective | undefined;
 
-  // Pie
   public pieChartOptions: ChartConfiguration['options'] = {
     plugins: {
       legend: {
@@ -63,17 +62,6 @@ export class DetailsComponent {
     ],
   };
   public pieChartType: ChartType = 'pie';
-
-  // events
-  public chartClicked({
-    event,
-    active,
-  }: {
-    event: ChartEvent;
-    active: object[];
-  }): void {
-    console.log(event, active);
-  }
 
   public chartHovered({
     event,
@@ -198,6 +186,20 @@ export class DetailsComponent {
       let shuffledData = [...this.dataSource.filteredData].sort(() => Math.random() - 0.5);;
       shuffledData.slice(0,count).forEach((row) => { this.selection.select(row); });
     }
+  }
+
+  deleteSelectedRows() {
+    let tempArray = this.selection.selected;
+    tempArray.forEach((selected) => {
+      let i = this.dataSource.data.findIndex((row) => {
+        return Object.keys(row).every((key: string) => {
+          return row[key] === selected[key];
+        });
+      });
+      this.dataSource.data.splice(i,1);
+      this.dataSource._updateChangeSubscription()
+      this.selection.clear();
+    });
   }
 
   @ViewChild('featureNameInput') featureNameInput!: ElementRef;
