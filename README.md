@@ -2,6 +2,21 @@
 
 A browser based tool to help manage datasets.
 
+## Features:
+> [!NOTE]
+> Server not yet setup to actually save actions
+- Upload/download datasets in csv format
+- View uploaded datasets in table
+    - View dataset name, feature count, row count
+    - Input to change dataset name and description
+- View dataset rows in table
+    - Filter datasets by value (includes optional greater/less than filters)
+    - Sort dataset by feature column
+    - Select specific rows or select a random sample of specified size
+        - Download or delete selected rows
+    - Visualize value distribution of specified feature name in a chart
+    
+
 ## TODO:
 ### Features:
 > [!NOTE]
@@ -18,5 +33,3 @@ A browser based tool to help manage datasets.
 - Modify multiple datasets (e.g. merge datasets or specific entries from other datasets)
 - ~~Select n random sample rows from dataset~~
 
-### Misc:
-- Set up server for http requests
