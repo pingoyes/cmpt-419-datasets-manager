@@ -14,6 +14,8 @@ import { ChartConfiguration, ChartData, ChartEvent, ChartType, Colors} from 'cha
 import { BaseChartDirective } from 'ng2-charts';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-details',
@@ -34,7 +36,24 @@ export class DetailsComponent {
 
   selection = new SelectionModel<any>(true, []);
 
-  // from the ng2-charts demo
+  constructor(private dialog: MatDialog) {
+    const datasetId = this.route.snapshot.params['id'];
+    this.dataset = this.datasetsService.getDatasetById(datasetId);
+    if (this.dataset) {
+      this.datasetsService.getDatasetRowsById(datasetId)
+        ?.then((result) => {
+          this.displayedColumns = ['select', ...Object.keys(result[0])];
+          this.dataColumns = Object.keys(result[0]);
+          this.dataSource = new MatTableDataSource(result);
+          this.dataSource.paginator = this.paginator;
+          this.dataSource.sort = this.sort;
+          this.updatePieChart(result, this.dataColumns[0]);
+          this.pieChartInputVal = this.dataColumns[0];
+        });
+    }
+  }
+
+  // Pie Chart from the ng2-charts demo
   @ViewChild(BaseChartDirective) chart: BaseChartDirective | undefined;
 
   public pieChartOptions: ChartConfiguration['options'] = {
@@ -153,15 +172,16 @@ export class DetailsComponent {
     return sortedObject;
   }
 
-  // from angular tutorial //
-  /** Whether the number of selected elements matches the total number of rows. */
+  // Row Selection
+  @ViewChild(MatPaginator) paginator: MatPaginator = <MatPaginator>{};
+  @ViewChild(MatSort) sort: MatSort = <MatSort>{};
+
   isAllSelected() {
     const numSelected = this.selection.selected.length;
     const numRows = this.dataSource.data.length;
     return numSelected == numRows;
   }
 
-  /** Selects all rows if they are not all selected; otherwise clear selection. */
   toggleAllRows() {
     this.isAllSelected() ?
       this.selection.clear() :
@@ -202,6 +222,7 @@ export class DetailsComponent {
     });
   }
 
+  // Value filters
   @ViewChild('featureNameInput') featureNameInput!: ElementRef;
   @ViewChild('featureComparatorInput') featureComparatorInput!: ElementRef;
   @ViewChild('filterValueInput') filterValueInput!: ElementRef;
@@ -232,23 +253,21 @@ export class DetailsComponent {
     this.dataSource.filter = filterValue;
   }
 
-  constructor() {
-    const datasetId = this.route.snapshot.params['id'];
-    this.dataset = this.datasetsService.getDatasetById(datasetId);
-    if (this.dataset) {
-      this.datasetsService.getDatasetRowsById(datasetId)
-        ?.then((result) => {
-          this.displayedColumns = ['select', ...Object.keys(result[0])];
-          this.dataColumns = Object.keys(result[0]);
-          this.dataSource = new MatTableDataSource(result);
-          this.dataSource.paginator = this.paginator;
-          this.dataSource.sort = this.sort;
-          this.updatePieChart(result, this.dataColumns[0]);
-          this.pieChartInputVal = this.dataColumns[0];
-        });
-    }
-  }
+  openDialog() {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent,{
+      data:{
+        message: `Proceed to delete ${this.selection.selected.length} rows?`,
+        buttonText: {
+          ok: 'Delete',
+          cancel: 'Cancel'
+        }
+      }
+    });
 
-  @ViewChild(MatPaginator) paginator: MatPaginator = <MatPaginator>{};
-  @ViewChild(MatSort) sort: MatSort = <MatSort>{};
+    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+      if (confirmed) {
+        this.deleteSelectedRows();
+      }
+    });
+  }
 }
