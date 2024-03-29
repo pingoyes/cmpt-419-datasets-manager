@@ -1,0 +1,30 @@
+a {
+    color: #605DC8;
+    font-weight: bold;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.dataset-description-input {
+    min-width: 60%;
+    padding: 2px;
+    font-size: 14px;
+    overflow: auto;
+    border-top: none;
+    border-right: none;
+    border-left: none;
+    border-bottom: 1px solid;
+}
+
+.dataset-name-input {
+    min-width: 40%;
+    padding: 2px;
+    font-size: 14px;
+    overflow: auto;
+    border-top: none;
+    border-right: none;
+    border-left: none;
+    border-bottom: 1px solid;
+}

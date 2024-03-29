@@ -1,0 +1,80 @@
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<div class="table-options-wrapper">
+    <span>Filter by:</span>
+    <mat-form-field class="table-options-item-medium table-options-item">
+        <mat-label>Feature name</mat-label>
+        <input matInput #featureNameInput type="text" [value]="" (keyup)="onTableFilterChanged(featureNameInput.value, featureComparatorInput.value, filterValueInput.value)">
+        <mat-hint *ngIf="!dataColumns.includes(featureNameInput.value.trim())">*Must be <span style="font-weight: bold; text-decoration: underline;">exact</span></mat-hint>
+    </mat-form-field>
+    <mat-form-field class="table-options-item-medium table-options-item">
+        <mat-label>Comparator</mat-label>
+        <select #featureComparatorInput matNativeControl (change)="onTableFilterChanged(featureNameInput.value, featureComparatorInput.value, filterValueInput.value)">
+            <option value="="> contains </option>
+            <option value=">"> greater than </option>  
+            <option value="<"> less than </option>
+        </select>
+    </mat-form-field>
+    <mat-form-field class="table-options-item-medium table-options-item">
+        <mat-label>Filter value</mat-label>
+        <input matInput #filterValueInput type="text" [value]="" (keyup)="onTableFilterChanged(featureNameInput.value, featureComparatorInput.value, filterValueInput.value)">
+    </mat-form-field>
+</div>
+<div class="mat-elevation-z8 table-wrapper">
+    <mat-table matSort [dataSource]="dataSource">
+        <ng-container matColumnDef="select">
+            <mat-header-cell *matHeaderCellDef>
+                <mat-checkbox (change)="$event ? toggleAllRows() : null"
+                            [checked]="selection.hasValue() && isAllSelected()"
+                            [indeterminate]="selection.hasValue() && !isAllSelected()">
+                </mat-checkbox>
+            </mat-header-cell>
+            <mat-cell *matCellDef="let row">
+                <mat-checkbox (click)="$event.stopPropagation()"
+                            (change)="$event ? selection.toggle(row) : null"
+                            [checked]="selection.isSelected(row)">
+                </mat-checkbox>
+            </mat-cell>
+        </ng-container>
+        <ng-container *ngFor="let col of dataColumns" matColumnDef="{{col}}">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>{{col}}</mat-header-cell>
+            <mat-cell *matCellDef="let element">{{element[col]}}</mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+    <mat-paginator [pageSizeOptions]="[10, 20, 50]"
+        showFirstLastButtons
+        aria-label="Select page">
+    </mat-paginator>
+</div>
+<div class="table-options-wrapper">
+    <button mat-raised-button class="primary" (click)="downloadSelectedRows()" [disabled]="selection.selected.length == 0">Download: {{ selection.selected.length }} rows selected<mat-icon iconPositionEnd>download</mat-icon></button>
+</div>
+<mat-divider></mat-divider>
+<div class="canvas-wrapper">    
+    <canvas
+        baseChart
+        [data]="pieChartData"
+        [type]="pieChartType"
+        [options]="pieChartOptions"
+    >
+    </canvas>
+    <mat-divider></mat-divider> 
+    <div class="button-row">
+        <mat-form-field>
+            <mat-label>Filter by <span style="font-weight: bold; text-decoration: underline;">exact</span> feature name<mat-icon iconPositionEnd>subdirectory_arrow_left</mat-icon></mat-label>
+            <input matInput #pieChartInput type="text" [value]="dataColumns[0]" (change)="onPieChartInputChanged($event)">
+            <mat-hint class="pie-chart-input-hint" *ngIf="!dataColumns.includes(pieChartInput.value.trim())">*Feature not found</mat-hint>
+        </mat-form-field>
+        <button mat-raised-button color="primary" (click)="toggleLegend()">
+            Toggle Legend
+        </button>
+        <button mat-raised-button color="primary" (click)="addSlice()">
+            Add Slice
+        </button>
+        <button mat-raised-button color="primary" (click)="removeSlice()">
+            Remove Slice
+        </button>
+    </div>
+</div>

@@ -1,0 +1,66 @@
+button:disabled {
+    filter: brightness(70%);
+}
+
+/* add scrolling on overflow */
+mat-table {
+    overflow-x: auto;
+    margin-bottom: 16px;
+}
+
+mat-cell,
+mat-header-cell {
+    word-wrap: initial;
+    display: table-cell;
+    padding: 8px 32px;
+    line-break: unset;
+    white-space: nowrap;
+    overflow: hidden;
+    vertical-align: middle;
+}
+
+mat-cell:last-of-type {
+    width: 100%;
+}
+
+mat-row,
+mat-header-row {
+  display: table-row;
+}
+
+.button-row {
+    display:flex;
+    margin-top: 16px;
+    margin-bottom: 16px;
+    column-gap: 8px;
+}
+
+.canvas-wrapper {
+    width: 720px;
+    margin-top: 16px;
+    margin-bottom: 16px;
+}
+
+.pie-chart-input-hint {
+    color: rgb(255, 84, 84);
+}
+
+.table-options-item-small {
+    
+    width: 96px;
+}
+
+.table-options-item-medium {
+    width: 160px;
+}
+
+.table-options-item {
+    margin-top: 16px;
+}
+
+.table-options-wrapper {
+    display: flex;
+    align-items: center;
+    column-gap: 8px;
+    margin-bottom: 16px;
+}
