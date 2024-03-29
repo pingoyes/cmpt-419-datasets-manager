@@ -179,7 +179,7 @@ export class DetailsComponent {
       this.selection.clear() :
       this.dataSource.data.forEach((row) => {
         // only toggle all filtered rows
-        if (this.filterTable(row, this.filterValueInput.nativeElement.value, this.featureNameInput.nativeElement.value, this.featureComparatorInput.nativeElement.value)) {
+        if (this.dataSource.filteredData.includes(row)) {
           this.selection.select(row);
         }
       });
@@ -187,7 +187,16 @@ export class DetailsComponent {
 
   downloadSelectedRows() {
     if (this.dataset) {
-      this.datasetsService.downloadDatasetFile(this.selection.selected, this.dataset.id ,'application/json');
+      this.datasetsService.downloadDatasetFile(this.selection.selected, this.dataset.id ,'text/csv');
+    }
+  }
+
+  selectRandomRows(val: string) {
+    let count = +val;
+    if (count < this.dataSource.data.length && count > 0) {
+      this.selection.clear();
+      let shuffledData = [...this.dataSource.filteredData].sort(() => Math.random() - 0.5);;
+      shuffledData.slice(0,count).forEach((row) => { this.selection.select(row); });
     }
   }
 

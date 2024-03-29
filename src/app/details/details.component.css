@@ -41,13 +41,13 @@ mat-header-row {
     margin-bottom: 16px;
 }
 
-.pie-chart-input-hint {
+.error-hint {
     color: rgb(255, 84, 84);
 }
 
 .table-options-item-small {
     
-    width: 96px;
+    width: 128px;
 }
 
 .table-options-item-medium {
@@ -55,7 +55,7 @@ mat-header-row {
 }
 
 .table-options-item {
-    margin-top: 16px;
+    margin-top: 20px;
 }
 
 .table-options-wrapper {

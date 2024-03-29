@@ -50,6 +50,17 @@
 </div>
 <div class="table-options-wrapper">
     <button mat-raised-button class="primary" (click)="downloadSelectedRows()" [disabled]="selection.selected.length == 0">Download: {{ selection.selected.length }} rows selected<mat-icon iconPositionEnd>download</mat-icon></button>
+    <mat-divider [vertical]="true" style="height: 64px;"></mat-divider>
+    <mat-form-field class="table-options-item-small table-options-item">
+        <mat-label># of Rows</mat-label>
+        <input matInput #randomShuffleInput type="number" min="1" [value]="1">
+        <mat-hint class="error-hint" *ngIf="(+randomShuffleInput.value > this.dataSource.filteredData.length) || (+randomShuffleInput.value < 1 )">*Valid range: 1-{{ this.dataSource.filteredData.length }}</mat-hint>
+    </mat-form-field>
+    <button mat-raised-button class="primary" (click)="selectRandomRows(randomShuffleInput.value)"
+        [disabled]="(+randomShuffleInput.value > this.dataSource.filteredData.length) || (+randomShuffleInput.value < 1 )">
+            Select random rows
+            <mat-icon iconPositionEnd>shuffle</mat-icon>
+    </button>
 </div>
 <mat-divider></mat-divider>
 <div class="canvas-wrapper">    
@@ -65,7 +76,7 @@
         <mat-form-field>
             <mat-label>Filter by <span style="font-weight: bold; text-decoration: underline;">exact</span> feature name<mat-icon iconPositionEnd>subdirectory_arrow_left</mat-icon></mat-label>
             <input matInput #pieChartInput type="text" [value]="dataColumns[0]" (change)="onPieChartInputChanged($event)">
-            <mat-hint class="pie-chart-input-hint" *ngIf="!dataColumns.includes(pieChartInput.value.trim())">*Feature not found</mat-hint>
+            <mat-hint class="error-hint" *ngIf="!dataColumns.includes(pieChartInput.value.trim())">*Feature not found</mat-hint>
         </mat-form-field>
         <button mat-raised-button color="primary" (click)="toggleLegend()">
             Toggle Legend
