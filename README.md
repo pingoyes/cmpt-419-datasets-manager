@@ -16,8 +16,7 @@ A browser based tool to help manage datasets.
 - ~~Visualize dataset statistics (e.g. # of entries, # of specific feature values)~~
 - Modify singular datasets from the UI (e.g. ~~remove entries~~, remove features)
 - Modify multiple datasets (e.g. merge datasets or specific entries from other datasets)
-- Misc. tools such as generating samples from another dataset or modifying datasets for influence analysis
-    - Maybe have these newly generated datasets branch off of the original datasets for easier tracking
+- ~~Select n random sample rows from dataset~~
 
 ### Misc:
 - Set up server for http requests
