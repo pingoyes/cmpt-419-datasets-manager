@@ -4,6 +4,8 @@ A browser based tool to help manage datasets.
 
 ## TODO:
 ### Features:
+> [!NOTE]
+> Completed items are crossed out.
 - Upload/download datasets
     -  ~~Support csv~~ and maybe json
 - Manage datasets
