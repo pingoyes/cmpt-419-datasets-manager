@@ -203,7 +203,10 @@ export class DetailsComponent {
     let count = +val;
     if (count < this.dataSource.data.length && count > 0) {
       this.selection.clear();
-      let shuffledData = [...this.dataSource.filteredData].sort(() => Math.random() - 0.5);;
+      let shuffledData = [...this.dataSource.filteredData]
+        .map(value => ({ value, sort: Math.random() }))
+        .sort((a, b) => a.sort - b.sort)
+        .map(({ value }) => value);
       shuffledData.slice(0,count).forEach((row) => { this.selection.select(row); });
     }
   }
