@@ -2,6 +2,11 @@
 
 A browser based tool to help manage datasets.
 
+## Installation:
+Build using `npm install` or `npm install --force` in the project directory.
+
+Run using `ng serve`.
+
 ## Features:
 > [!NOTE]
 > Server not yet setup to actually save actions
